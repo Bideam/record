@@ -1,5 +1,5 @@
   var ul=document.getElementsByTagName('ul');
-  var inner=document.getElementsByClassName('inner')[0];
+  var inner=document.getElementsByClassName('inner')[1];
   var li=document.getElementsByClassName('active')[0];
   var needl=document.getElementsByClassName('needle')[0];
   var position=needl.offsetLeft-li.offsetWidth/2;
@@ -14,10 +14,11 @@
   var transX;
   var t_trans;
   var xhr;
-  
+  //alert("offsetWidth:"+inner.offsetWidth+",scrollWidth:"+inner.scrollWidth+",clientWidth:"+inner.clientWidth);
+
   xhr = new XMLHttpRequest();      
   left_arrow.onclick=function(){
-    transform=ul[1].style.transform;
+    /*transform=ul[1].style.transform;
     transX=transform.match(/translateX\((.*?)\)/);
     t_trans=parseInt(transX[1]);
     
@@ -25,10 +26,16 @@
     if (t_trans >= 0) {
       counts=-(last_li.length-2);
     }
-    ul[1].style.transform="translateX("+counts*220+"px)";
+    ul[1].insertBefore(ul[1].children[last_li.length-1],ul[1].children.firstChild);
+    ul[1].removeChild(ul[1].childNodes[last_li.length-1]);
+    ul[1].style.transform="translateX("+220+"px)";*/
+    ul[1].insertBefore(ul[1].children[last_li.length-1],ul[1].firstChild);
+    doMove(5);
+
   }
   
   right_arrow.onclick=function(){
+    /*
     transform=ul[1].style.transform;
     transX=transform.match(/translateX\((.*?)\)/);
     t_trans=parseInt(transX[1]);
@@ -39,8 +46,19 @@
       counts=0;
     }
     ul[1].style.transform="translateX("+counts*220+"px)";
+    */
+    ul[1].appendChild(ul[1].firstChild);
     
+  }
+  function doMove(speed){
+    var iSpeed=0;
     
+    var timer=setInterval(function(){
+      iSpeed=+speed;
+      ul[1].offsetLeft>=220 ? clearInterval(timer) : ul[1].style.transform="translateX("+iSpeed+"px)";
+
+    }, 150);
+
   }
 if(!Detector.webgl){
       Detector.addGetWebGLMessage();
@@ -74,7 +92,8 @@ if(!Detector.webgl){
         window.data = data;
         
         loaddata(data);
-        
+        ul[1].style.width=ul[1].children.length*220+"px";
+        //alert(ul[1].children[last_li.length-1].innerHTML);,ul[1].children.firstChild);
       }
     }
 
